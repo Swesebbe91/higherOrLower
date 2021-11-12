@@ -1,0 +1,31 @@
+body {
+    background-color: green;
+}
+
+
+.flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+}
+
+.row {
+    display: flex;
+
+}
+
+.button {
+    width: 100%;
+    margin-left: 40px;
+    padding: 20px;
+    border-radius: 10%;
+    
+}
+
+.button1 {
+    width: 10%;
+    padding: 20px;
+    border-radius: 10%;
+}
