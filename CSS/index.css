@@ -45,4 +45,11 @@ body {
     
 }
 
+#image {
+    width: 10rem;
+    height: 6rem;
+    margin-left: 20%;
+    background-color: green;
+
+}
 
