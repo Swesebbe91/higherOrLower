@@ -2,7 +2,6 @@ let higher = document.getElementById("higher");
 let lower = document.getElementById("lower");
 let image = document.getElementById("image");
 image.style.display = "none"
-console.log(image);
 image.children[0].style.width = "10rem";
 image.children[0].style.height = "6rem";
 higher.disabled = true; //Sätt knappen inaktiv
@@ -15,8 +14,8 @@ let deck = {}; //Skapa en tom objektlista
 let rounds = 0; //Räkna antalet rundor
 let sum = 0; //Räknar antalet rätt
 
-let sumMessage = (sum) => {
-  //Funktion för att skriva ut message
+let inRowMessage = (sum) => {
+  //Funktion för att skriva ut ett meddelande
   message.innerText = `Du har nu ${sum} rätt irad!`;
   message.style.color = "lightblue";
 };
@@ -76,20 +75,7 @@ higher.addEventListener("click", async () => {
   /*Första spelkortet jämförs med andra spelkortet */
   if (secondCard > firstCard) {
     sum += 1; //Om andra kortet är högre än första, plussa en på sum;
-
-    if (sum === 3) {
-      //Check för att se om användaren klarat sig tre gånger, isåfall skriv ut ett postivt meddelande
-      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-      image.children[0].setAttribute("src", "../image/happy_smiley.png");
-    } else if (sum === 5) {
-      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-      image.children[0].setAttribute("src", "../image/test_smiley.jpg");
-    } else if (sum === 10) {
-      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-      image.children[0].setAttribute("src", "../image/chocked_smiley.png");
-    } else {
-      sumMessage(sum); //Annars skriv ut standard meddelande
-    }
+    winsInRowMessage(sum); //Titta på hur många gånger spelaren har i rad och addera ett speciellt meddelande till det.
 
     firstCard = secondCard; //Om vilkoret var sant att andra kortet var större än första, skriv över andra värdet till första variabeln.
   } else if (firstCard === secondCard) {
@@ -123,20 +109,8 @@ lower.addEventListener("click", async () => {
 
   if (secondCard < firstCard) {
     sum += 1;
-
-    if (sum === 3) {
-      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-      image.children[0].setAttribute("src", "../image/happy_smiley.png");
-    } else if (sum === 5) {
-      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-      image.children[0].setAttribute("src", "../image/test_smiley.jpg");
-    } else if (sum === 10) {
-      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-      image.children[0].setAttribute("src", "../image/chocked_smiley.png");
-      
-    } else {
-      sumMessage(sum);
-    }
+    winsInRowMessage(sum); //Titta på hur många gånger spelaren har i rad och addera ett speciellt meddelande till det.
+    
     firstCard = secondCard;
   } else if (firstCard === secondCard) {
     equalMessage(sum);
@@ -147,7 +121,6 @@ lower.addEventListener("click", async () => {
     higher.disabled = true;
     lower.disabled = true;
     rounds = 0;
-    console.log(image);
     image.children[0].setAttribute("src", "../image/sad_smiley.jpg");
   }
   rounds += 1;
@@ -182,5 +155,21 @@ function getValue(playCard) {
     playCard.value = 14;
     getCard.children[1].innerText = "Runda: " + rounds;
     getCard.children[2].setAttribute("src", playCard.image);
+  }
+}
+
+function winsInRowMessage (sum) {
+  if (sum === 3) { //Meddelande vid tre rätt i rad
+    message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    image.children[0].setAttribute("src", "../image/happy_smiley.png");
+  } else if (sum === 5) { //Meddelande vid fem rätt i rad
+    message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    image.children[0].setAttribute("src", "../image/test_smiley.jpg");
+  } else if (sum === 10) { //Meddelande vid 10 rätt i rad
+    message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    image.children[0].setAttribute("src", "../image/chocked_smiley.png");
+    
+  } else {
+    inRowMessage(sum); //Standard meddelande
   }
 }
