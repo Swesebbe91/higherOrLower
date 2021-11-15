@@ -1,128 +1,210 @@
-
-const higher = document.getElementById("higher");
-const lower = document.getElementById("lower");
-const getCard = document.getElementById("getCard");
-
-
-
+let higher = document.getElementById("higher");
+let lower = document.getElementById("lower");
+higher.disabled = true;
+lower.disabled = true;
+let firstCard;
+let secondCard;
 let deck = {};
+let rounds = 0;
+
+
+let getCard = document.getElementById("getCard");
+let message = document.getElementById("message");
+let sum = 0;
+let sumMessage = (sum) => {
+  message.innerText = `Du har nu ${sum} rätt irad!`;
+};
+
+let loserMessage = (sum) => {
+  message.innerText = `Tyvärr du gissade fel! Du fick ${sum} rätt i rad`;
+};
+
+let equalMessage = (sum) => {
+  message.innerText = `Kortet du drog var varken högre eller lägre, dra ett nytt kort du har fortfarande ${sum} rätt irad!`;
+};
 
 async function getDeck() {
-        const res = await fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
-        const data = await res.json();
-        deck = data;
-        console.log(deck);  
+  const res = await fetch(
+    "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"
+  );
+  const data = await res.json();
+  deck = data;
+  console.log(deck);
 }
 getDeck();
 
-const drawACard = document.getElementById("start");
+drawACard = document.getElementById("start");
+drawACard.addEventListener("click", async () => {
+  const res = await fetch(
+    `https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=2`
+  );
+  const data = await res.json();
+  let playCard = data.cards[0];
 
-drawACard.addEventListener("click", async() => {
-    const res = await fetch(`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=2`);
-    const data = await res.json();
-    let playcard = data.cards[0];
-
-    if(playcard.value > 1 && playcard.value <= 10 ) {
-    getCard.children[1].innerText = playcard.value
-    getCard.children[2].setAttribute("src", playcard.image);
+  if (playCard.value < 10) {
+    getCard.children[1].innerText = "Runda: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "10") {
+    playCard.value = 10;
+    console.log("HÄR ÄR JAG! 10! ");
     
-    }
-
-    else if (playcard.value === "jack".toUpperCase()) {
-        playcard.value = 11;
-        getCard.children[1].innerText = playcard.value
-        getCard.children[2].setAttribute("src", playcard.image);
-
-    }
-
-    else if (playcard.value === "QUEEN".toUpperCase()) {
-        playcard.value = 12;
-        getCard.children[1].innerText = playcard.value
-        getCard.children[2].setAttribute("src", playcard.image);
-    }
-
-    else if (playcard.value === "KING".toUpperCase()) {
-        playcard.value = 13;
-        getCard.children[1].innerText = playcard.value
-        getCard.children[2].setAttribute("src", playcard.image);
-    }
-
-    else {
-        playcard.value = 14;
-        getCard.children[1].innerText = playcard.value
-        getCard.children[2].setAttribute("src", playcard.image);
-        
-    }
-})
-
-
-higher.addEventListener("click", tryHigherOrLower());
-
-lower.addEventListener("click", tryHigherOrLower => {
-    console.log(event.target);
-})
-
-function tryHigherOrLower() {
-    console.log( getCard.children[1].innerText = playcard.value);
-    console.log("TEEEEST");
-    
-}
-
- /* function higherOrLower() {
-    
-    let ison = true;
-    let sum = 0;
-  
-    while (ison) {
-      if (sum === 3) {
-        window.alert(`Fan du är bra på det här, du har nu ${sum} rätt i rad`);
-      }
-  
-      if (sum === 5) {
-        window.alert(`Nu är du halvägs ${sum} rätt i rad`);
-      }
-  
-      if (sum === 10) {
-        window.alert(
-          `Du är mästare på det här spelet, grattis! du vann hela skitet med ${sum} rätt i rad!`
-        );
-        ison = false;
-      }
-      window.alert(
-        `Gissa om nästa nummer kommer vara högre eller lägre än ${number}`
-      );
-  
-      if (number2 > number) {
-        window.alert(
-          `Du vann \n Numret var: ${number} & Du gissade på att ${number2} var högre`
-        );
-        sum += 1;
-      } else if (number2 < number && answer === "lower") {
-        window.alert(
-          `Du vann \n Numret var: ${number} & Du gissade på att ${number2} var lägre`
-        );
-        sum += 1;
-      } else if (number === number2) {
-        window.alert(
-          `Tyvärr du förlorade! Talen var identiska men du gissade rätt ${sum} gånger`
-        );
-        ison = false;
-      } else {
-        if (sum === 0) {
-          window.alert(
-            `Tyvärr du förlorade! Du gissade fel!, Du är kass, du hade ${sum} rätt`
-          );
-        } else {
-          window.alert(
-            `Tyvärr du förlorade! Du gissade fel!, men du hade iallafall ${sum} rätt`
-          );
-        }
-        ison = false;
-      }
-  
-      number = number2;
-    }
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "jack".toUpperCase()) {
+    playCard.value = 11;
+    getCard.children[1].innerText = "Runda: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "QUEEN".toUpperCase()) {
+    playCard.value = 12;
+    getCard.children[1].innerText = "Runda: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "KING".toUpperCase()) {
+    playCard.value = 13;
+    getCard.children[1].innerText = "Runda: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else {
+    playCard.value = 14;
+    getCard.children[1].innerText = "Runda: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
   }
-*/
+  firstCard = playCard.value;
+  console.log("Första numret var: " + firstCard);
+  drawACard.disabled = true;
+  higher.disabled = false;
+  lower.disabled = false;
+  rounds++;
+});
 
+higher.addEventListener("click", async () => {
+  const res = await fetch(
+    `https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=2`
+  );
+  const data = await res.json();
+  playCard = data.cards[0];
+
+  if (playCard.value < 10) {
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } 
+  else if (playCard.value === "10") {
+    playCard.value = 10;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+    console.log("HÄR ÄR JAG! 10! ")
+  }
+  else if (playCard.value === "jack".toUpperCase()) {
+    playCard.value = 11;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "QUEEN".toUpperCase()) {
+    playCard.value = 12;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "KING".toUpperCase()) {
+    playCard.value = 13;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else {
+    playCard.value = 14;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  }
+  secondCard = playCard.value;
+  console.log("firsta numret är " + firstCard);
+  console.log("Andra numret är: " + secondCard);
+
+  if (secondCard > firstCard) {
+    sum += 1;
+
+    if (sum === 3) {
+      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    }
+    
+    else if (sum === 5) {
+      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    } else if (sum === 10) {
+      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    } else {
+      sumMessage(sum);
+    }
+    firstCard = secondCard;
+  } else if (firstCard === secondCard) {
+    equalMessage(sum);
+  } else {
+    loserMessage(sum);
+    sum = 0;
+    drawACard.disabled = false;
+    higher.disabled = true;
+    lower.disabled = true;
+    rounds = 0;
+  }
+  rounds +=1;
+  console.log(rounds);
+});
+
+
+lower.addEventListener("click", async () => {
+  const res = await fetch(
+    `https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=2`
+  );
+  const data = await res.json();
+  playCard = data.cards[0];
+    console.log("Detta är typen " + typeof playCard.value);
+  if (playCard.value < 10) {
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  }
+  else if (playCard.value === "10") {
+    playCard.value = 10;
+    console.log("HÄR ÄR JAG! 10! ")
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } 
+  
+  else if (playCard.value === "jack".toUpperCase()) {
+    playCard.value = 11;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "QUEEN".toUpperCase()) {
+    playCard.value = 12;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else if (playCard.value === "KING".toUpperCase()) {
+    playCard.value = 13;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  } else {
+    playCard.value = 14;
+    getCard.children[1].innerText = "Rundor: " + rounds;
+    getCard.children[2].setAttribute("src", playCard.image);
+  }
+  secondCard = playCard.value;
+  console.log("firsta numret är " + firstCard);
+  console.log("Andra numret är " + secondCard);
+
+  if (secondCard < firstCard) {
+    sum += 1;
+
+    if (sum === 3) {
+      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    } else if (sum === 5) {
+      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    } else if (sum === 10) {
+      message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
+    } else {
+      sumMessage(sum);
+    }
+    firstCard = secondCard;
+  } else if (firstCard === secondCard) {
+    equalMessage(sum);
+  } else {
+    loserMessage(sum);
+    sum = 0;
+    drawACard.disabled = false;
+    higher.disabled = true;
+    lower.disabled = true;
+    rounds = 0;
+  }
+  rounds +=1;
+  console.log(rounds);
+});
 
