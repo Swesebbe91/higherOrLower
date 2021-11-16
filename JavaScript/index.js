@@ -1,7 +1,7 @@
 let higher = document.getElementById("higher");
 let lower = document.getElementById("lower");
 let image = document.getElementById("image");
-image.style.display = "none";
+image.style.display = "none"
 image.children[0].style.width = "10rem";
 image.children[0].style.height = "6rem";
 higher.disabled = true; //Sätt knappen inaktiv
@@ -71,7 +71,7 @@ higher.addEventListener("click", async () => {
 
   getValue(playCard); // Funktion som hämtar värdet från API:n, tittar värdet mot en statement & skriver ut värdena @rad 133
   secondCard = playCard.value; //Skriver över värdet från ovan till ett andra spelkort
-
+  
   /*Första spelkortet jämförs med andra spelkortet */
   if (secondCard > firstCard) {
     sum += 1; //Om andra kortet är högre än första, plussa en på sum;
@@ -110,7 +110,7 @@ lower.addEventListener("click", async () => {
   if (secondCard < firstCard) {
     sum += 1;
     winsInRowMessage(sum); //Titta på hur många gånger spelaren har i rad och addera ett speciellt meddelande till det.
-
+    
     firstCard = secondCard;
   } else if (firstCard === secondCard) {
     equalMessage(sum);
@@ -158,19 +158,17 @@ function getValue(playCard) {
   }
 }
 
-function winsInRowMessage(sum) {
-  if (sum === 3) {
-    //Meddelande vid tre rätt i rad
+function winsInRowMessage (sum) {
+  if (sum === 3) { //Meddelande vid tre rätt i rad
     message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-    image.children[0].setAttribute("src", "../image/happy_smiley.png");
-  } else if (sum === 5) {
-    //Meddelande vid fem rätt i rad
+    image.children[0].setAttribute("src", "../image/thumbs_up.jpg");
+  } else if (sum === 5) { //Meddelande vid fem rätt i rad
     message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-    image.children[0].setAttribute("src", "../image/test_smiley.jpg");
-  } else if (sum === 10) {
-    //Meddelande vid 10 rätt i rad
+    image.children[0].setAttribute("src", "../image/happy_smiley.jpg");
+  } else if (sum === 10) { //Meddelande vid 10 rätt i rad
     message.innerText = `Wow du är ju bra på det här, du har nu ${sum} rätt i rad`;
-    image.children[0].setAttribute("src", "../image/chocked_smiley.png");
+    image.children[0].setAttribute("src", "../image/chocked_smiley.jpg");
+    
   } else {
     inRowMessage(sum); //Standard meddelande
   }
